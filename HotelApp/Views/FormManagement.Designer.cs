@@ -28,18 +28,65 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            bookingBindingSource = new BindingSource(components);
+            hotelAppDbContextBindingSource = new BindingSource(components);
+            hotelAppDbContextBindingSource1 = new BindingSource(components);
+            roomBindingSource = new BindingSource(components);
+            buttonCustomers = new Button();
+            ((System.ComponentModel.ISupportInitialize)bookingBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)hotelAppDbContextBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)hotelAppDbContextBindingSource1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)roomBindingSource).BeginInit();
             SuspendLayout();
+            // 
+            // bookingBindingSource
+            // 
+            bookingBindingSource.DataSource = typeof(Repository.Entities.Booking);
+            // 
+            // hotelAppDbContextBindingSource
+            // 
+            hotelAppDbContextBindingSource.DataSource = typeof(Repository.HotelAppDbContext);
+            // 
+            // hotelAppDbContextBindingSource1
+            // 
+            hotelAppDbContextBindingSource1.DataSource = typeof(Repository.HotelAppDbContext);
+            // 
+            // roomBindingSource
+            // 
+            roomBindingSource.DataSource = typeof(Repository.Entities.Room);
+            // 
+            // buttonCustomers
+            // 
+            buttonCustomers.Location = new Point(882, 441);
+            buttonCustomers.Name = "buttonCustomers";
+            buttonCustomers.Size = new Size(134, 29);
+            buttonCustomers.TabIndex = 54;
+            buttonCustomers.Text = "Hantera Kunder";
+            buttonCustomers.UseVisualStyleBackColor = true;
+            buttonCustomers.Click += buttonCustomers_Click;
             // 
             // FormManagement
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1590, 805);
+            ClientSize = new Size(1028, 482);
+            Controls.Add(buttonCustomers);
             Name = "FormManagement";
-            Text = "FormManagement";
+            Text = "Bokningshantering";
+            Load += FormManagement_Load;
+            ((System.ComponentModel.ISupportInitialize)bookingBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)hotelAppDbContextBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)hotelAppDbContextBindingSource1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)roomBindingSource).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
+        private BindingSource hotelAppDbContextBindingSource;
+        private BindingSource bookingBindingSource;
+        private BindingSource hotelAppDbContextBindingSource1;
+        private BindingSource roomBindingSource;
+        private Button buttonCustomers;
     }
 }

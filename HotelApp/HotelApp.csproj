@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Classes\" />
+    <Folder Include="Properties\" />
     <Folder Include="Repository\Migrations\" />
   </ItemGroup>
 

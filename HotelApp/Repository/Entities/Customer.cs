@@ -23,5 +23,10 @@ namespace HotelApp.Repository.Entities
         public string PhoneNumber { get; set; }
 
         public ICollection<Booking> Bookings { get; set; }
+
+        public override string ToString()
+        {
+            return $"Namn: {Name}, Mejl: {Email}, Telefonnummer: {PhoneNumber}";
+        }
     }
 }

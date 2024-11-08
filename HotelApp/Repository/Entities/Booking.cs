@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace HotelApp.Repository.Entities
 {
@@ -36,7 +37,8 @@ namespace HotelApp.Repository.Entities
         public Invoice Invoice { get; set; }
 
         // Flag to indicate if the booking is cancelled
-        public bool IsCancelled { get; private set; } = false;
+        [DefaultValue(false)] // This is optional in the C# model
+        public bool IsCancelled { get; set; } = false; // Default value set in the class
 
         // Method to cancel booking if payment is overdue
         public void CancelBookingIfOverdue()

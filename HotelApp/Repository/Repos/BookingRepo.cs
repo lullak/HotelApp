@@ -13,69 +13,70 @@ namespace HotelApp.Repository.Repos
             _context = context;
         }
 
-        public List<Booking> Search(string condition)
-        {
-            return _context.Bookings.Where(b => b.Customer.Name.Contains(condition)).ToList();
-        }
-        // CREATE: Add a new booking
-        public void AddBooking(Booking booking)
-        {
-            _context.Bookings.Add(booking);
-            _context.SaveChanges();
-        }
+        // Get all bookings
 
-        // READ: Get a booking by ID
-        public Booking? GetBookingById(int bookingId)
-        {
-            return _context.Bookings
-                .Include(b => b.Customer)   // Optional: Include related data
-                .Include(b => b.Room)       // Optional: Include related data
-                .Include(b => b.Invoice)    // Optional: Include related data
-                .FirstOrDefault(b => b.BookingId == bookingId);
-        }
-
-        // READ: Get all bookings (optionally filtered by a condition)
         public List<Booking> GetAllBookings()
         {
             return _context.Bookings
-                .Include(b => b.Customer)  // Optional: Include related data
-                .Include(b => b.Room)      // Optional: Include related data
-                .Include(b => b.Invoice)   // Optional: Include related data
-                .ToList();  
+                .Include(b => b.Customer)
+                .Include(b => b.Room)
+                .Include(b => b.Invoice)
+                .ToList();
         }
 
-        // UPDATE: Update an existing booking
-        public void UpdateBooking(Booking booking)
+        // Add booking
+        public void AddBooking(Booking booking)
         {
-            using (HotelAppDbContext db = _context)  // Use _context instead of creating a new instance
+            // Check if room is already booked for the selected dates
+            bool isRoomAvailable = !_context.Bookings
+                .Any(b => b.RoomId == booking.RoomId &&
+                          ((b.CheckInDate >= booking.CheckInDate && b.CheckInDate <= booking.CheckOutDate) ||
+                           (b.CheckOutDate >= booking.CheckInDate && b.CheckOutDate <= booking.CheckOutDate)));
+            if (isRoomAvailable)
             {
-                // Fetch the original booking record to be updated
-                Booking original = db.Bookings.SingleOrDefault(b => b.BookingId == booking.BookingId);
-
-                if (original != null)
-                {
-                    // Update the original booking with the new values
-                    db.Entry(original).CurrentValues.SetValues(booking);
-
-                    // Save the changes to the database
-                    db.SaveChanges();
-                }
+                _context.Bookings.Add(booking);
+                _context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("Room is already booked for the selected dates.");
             }
         }
 
-        // DELETE: Delete a booking by ID
-        public bool DeleteBooking(int bookingId)
+        // Update booking
+        public void UpdateBooking(Booking updatedBooking)
         {
-            var bookingToDelete = _context.Bookings.FirstOrDefault(b => b.BookingId == bookingId);
-            if (bookingToDelete == null)
+            var originalBooking = _context.Bookings.SingleOrDefault(b => b.BookingId == updatedBooking.BookingId);
+            if (originalBooking != null)
             {
-                return false; // Booking not found
+                _context.Entry(originalBooking).CurrentValues.SetValues(updatedBooking);
+                _context.SaveChanges();
             }
+        }
 
-            _context.Bookings.Remove(bookingToDelete);
-            _context.SaveChanges();
+        // Delete booking
+        public void DeleteBooking(int bookingId)
+        {
+            var booking = _context.Bookings.SingleOrDefault(b => b.BookingId == bookingId);
+            if (booking != null)
+            {
+                _context.Bookings.Remove(booking);
+                _context.SaveChanges();
+            }
+        }
 
-            return true; // Booking deleted successfully
+        // Get available rooms for a date range and number of people
+        public List<Room> GetAvailableRooms(DateTime checkInDate, DateTime checkOutDate, int numberOfPeople)
+        {
+            var bookedRoomIds = _context.Bookings
+                .Where(b => (b.CheckInDate >= checkInDate && b.CheckInDate <= checkOutDate) ||
+                           (b.CheckOutDate >= checkInDate && b.CheckOutDate <= checkOutDate))
+                .Select(b => b.RoomId)
+                .ToList();
+
+            return _context.Rooms
+                .Where(r => !bookedRoomIds.Contains(r.RoomId) && r.Capacity >= numberOfPeople)
+                .ToList();
         }
     }
 }

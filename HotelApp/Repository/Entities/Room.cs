@@ -22,8 +22,12 @@ namespace HotelApp.Repository.Entities
         [Required]
         public bool HasExtraBed { get; set; }
 
-        [Range(1, 2, ErrorMessage = "Extra bed count must be between 1 and 2.")]
+        [Range(1, 2, ErrorMessage = "Antalet extra sängar måste vara mellan 1 and 2.")]
         public int? ExtraBedCount { get; set; }
+
+        [Required]
+        [Range(1, 4, ErrorMessage = "Kapacitet måste vara mellan 1 and 4.")]
+        public int Capacity { get; set; }  // The number of people the room can accommodate
 
         // Navigation property - 0 to many relationship with Booking
         public ICollection<Booking> Bookings { get; set; }
