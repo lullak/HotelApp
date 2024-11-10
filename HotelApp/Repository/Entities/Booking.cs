@@ -56,7 +56,7 @@ namespace HotelApp.Repository.Entities
 
             if (Invoice?.IsPaid == false && BookingDate.AddDays(10) < DateTime.Now)
             {
-                bookingInfo += " \t (Avbokad)";
+                bookingInfo += " \t (Annullerad)";
             }
             return bookingInfo;
         }
