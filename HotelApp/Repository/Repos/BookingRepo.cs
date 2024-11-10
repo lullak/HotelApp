@@ -13,70 +13,117 @@ namespace HotelApp.Repository.Repos
             _context = context;
         }
 
-        // Get all bookings
-
         public List<Booking> GetAllBookings()
         {
             return _context.Bookings
                 .Include(b => b.Customer)
                 .Include(b => b.Room)
                 .Include(b => b.Invoice)
+                .OrderByDescending(b => b.BookingDate)
                 .ToList();
         }
 
-        // Add booking
-        public void AddBooking(Booking booking)
+        public void CancelOverdueBookings()
         {
-            // Check if room is already booked for the selected dates
-            bool isRoomAvailable = !_context.Bookings
-                .Any(b => b.RoomId == booking.RoomId &&
-                          ((b.CheckInDate >= booking.CheckInDate && b.CheckInDate <= booking.CheckOutDate) ||
-                           (b.CheckOutDate >= booking.CheckInDate && b.CheckOutDate <= booking.CheckOutDate)));
-            if (isRoomAvailable)
+            var overdueBookings = _context.Bookings
+                                    .Include(b => b.Invoice)
+                                    .AsEnumerable()
+                                    .Where(b => !b.IsCancelled &&
+                                    b.Invoice != null &&
+                                    !b.Invoice.IsPaid &&
+                                    (DateTime.Now - b.BookingDate).TotalDays > 10)
+                                    .ToList();
+
+            foreach (var booking in overdueBookings)
             {
-                _context.Bookings.Add(booking);
-                _context.SaveChanges();
+                booking.IsCancelled = true;
             }
-            else
-            {
-                throw new Exception("Room is already booked for the selected dates.");
-            }
+            _context.SaveChanges();
         }
 
-        // Update booking
-        public void UpdateBooking(Booking updatedBooking)
+
+        public Booking CreateBooking(Customer customer, Room room, DateTime checkInDate, DateTime checkOutDate, decimal amount)
         {
-            var originalBooking = _context.Bookings.SingleOrDefault(b => b.BookingId == updatedBooking.BookingId);
-            if (originalBooking != null)
+
+            var newBooking = new Booking
             {
-                _context.Entry(originalBooking).CurrentValues.SetValues(updatedBooking);
-                _context.SaveChanges();
-            }
+                CustomerId = customer.CustomerId,
+                RoomId = room.RoomId,
+                BookingDate = DateTime.Now,
+                CheckInDate = checkInDate,
+                CheckOutDate = checkOutDate,
+                IsCancelled = false
+            };
+
+            var newInvoice = new Invoice
+            {
+                Amount = amount,
+                DateIssued = DateTime.Now,
+                IsPaid = false
+            };
+
+            newBooking.Invoice = newInvoice;
+
+            _context.Bookings.Add(newBooking);
+            _context.Invoices.Add(newInvoice);
+            _context.SaveChanges();
+
+            return newBooking;
         }
 
-        // Delete booking
         public void DeleteBooking(int bookingId)
         {
-            var booking = _context.Bookings.SingleOrDefault(b => b.BookingId == bookingId);
+            var booking = _context.Bookings
+                .Include(b => b.Invoice)
+                .FirstOrDefault(b => b.BookingId == bookingId);
+
             if (booking != null)
             {
+                if (booking.Invoice != null)
+                {
+                    _context.Invoices.Remove(booking.Invoice);
+                }
+
                 _context.Bookings.Remove(booking);
+
                 _context.SaveChanges();
             }
         }
 
-        // Get available rooms for a date range and number of people
-        public List<Room> GetAvailableRooms(DateTime checkInDate, DateTime checkOutDate, int numberOfPeople)
+        public void UpdateBooking(int bookingId, int newCustomerId, int newRoomId, DateTime newCheckInDate, DateTime newCheckOutDate, decimal newAmount, bool isPaid)
         {
-            var bookedRoomIds = _context.Bookings
-                .Where(b => (b.CheckInDate >= checkInDate && b.CheckInDate <= checkOutDate) ||
-                           (b.CheckOutDate >= checkInDate && b.CheckOutDate <= checkOutDate))
-                .Select(b => b.RoomId)
-                .ToList();
+            var booking = _context.Bookings
+                .Include(b => b.Invoice)
+                .FirstOrDefault(b => b.BookingId == bookingId);
 
-            return _context.Rooms
-                .Where(r => !bookedRoomIds.Contains(r.RoomId) && r.Capacity >= numberOfPeople)
-                .ToList();
+            if (booking != null)
+            {
+                if (booking.CustomerId != newCustomerId)
+                    booking.CustomerId = newCustomerId;
+
+                if (booking.RoomId != newRoomId)
+                    booking.RoomId = newRoomId;
+
+                booking.CheckInDate = newCheckInDate;
+                booking.CheckOutDate = newCheckOutDate;
+
+                if (booking.Invoice != null)
+                {
+                    booking.Invoice.Amount = newAmount;
+                    booking.Invoice.IsPaid = isPaid;
+                }
+                else
+                {
+                    booking.Invoice = new Invoice
+                    {
+                        Amount = newAmount,
+                        DateIssued = DateTime.Now,
+                        IsPaid = isPaid,
+                    };
+                }
+
+                _context.SaveChanges();
+            }
         }
     }
 }

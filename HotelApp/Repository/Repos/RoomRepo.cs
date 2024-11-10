@@ -1,4 +1,5 @@
 ﻿using HotelApp.Repository.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,34 +16,32 @@ namespace HotelApp.Repository.Repos
         {
             _context = context;
         }
+
+        public List<Room> GetAvailableRooms(DateTime checkInDate, DateTime checkOutDate, int capacity)
+        {
+            return _context.Rooms
+                .Include(r => r.Bookings)
+                .Where(room =>
+                    room.Capacity >= capacity &&
+                    room.Bookings.All(b => b.IsCancelled ||
+                                          b.CheckOutDate <= checkInDate ||
+                                          b.CheckInDate >= checkOutDate))
+                .ToList();
+        }
+
+        public bool IsRoomAvailable(int roomId, DateTime checkInDate, DateTime checkOutDate)
+        {
+            var isRoomBooked = _context.Bookings
+                .Where(b => b.RoomId == roomId &&
+                            ((b.CheckInDate >= checkInDate && b.CheckInDate < checkOutDate) ||
+                             (b.CheckOutDate > checkInDate && b.CheckOutDate <= checkOutDate)))
+                .Any();
+
+            return !isRoomBooked;
+        }
         public List<Room> GetAllRooms()
         {
             return _context.Rooms.ToList();
-        }
-
-        public void AddRoom(Room room)
-        {
-            _context.Rooms.Add(room);
-            _context.SaveChanges();
-        }
-
-        public void UpdateRoom(Room updatedRoom)
-        {
-            var originalRoom = _context.Rooms.SingleOrDefault(r => r.RoomId == updatedRoom.RoomId);
-            if (originalRoom != null)
-            {
-                _context.Entry(originalRoom).CurrentValues.SetValues(updatedRoom);
-                _context.SaveChanges();
-            }
-        }
-        public void DeleteRoom(int roomId)
-        {
-            var room = _context.Rooms.SingleOrDefault(r => r.RoomId == roomId);
-            if (room != null)
-            {
-                _context.Rooms.Remove(room);
-                _context.SaveChanges();
-            }
         }
     }
 }

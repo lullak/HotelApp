@@ -18,35 +18,47 @@ namespace HotelApp.Repository.Entities
         [Required]
         public DateTime CheckOutDate { get; set; }
 
-        // Foreign Key for Customer (1 to many relationship)
         public int CustomerId { get; set; }
 
         [ForeignKey("CustomerId")]
         public Customer Customer { get; set; }
 
-        // Foreign Key for Room (1 to many relationship)
         public int RoomId { get; set; }
 
         [ForeignKey("RoomId")]
         public Room Room { get; set; }
 
-        // Foreign Key for Invoice (1 to 1 relationship)
-        public int InvoiceId { get; set; }
+        public int? InvoiceId { get; set; }
 
         [ForeignKey("InvoiceId")]
         public Invoice Invoice { get; set; }
 
-        // Flag to indicate if the booking is cancelled
-        [DefaultValue(false)] // This is optional in the C# model
-        public bool IsCancelled { get; set; } = false; // Default value set in the class
+        [DefaultValue(false)]
+        public bool IsCancelled { get; set; } = false; 
 
-        // Method to cancel booking if payment is overdue
         public void CancelBookingIfOverdue()
         {
             if (Invoice != null && Invoice.IsPaymentOverdue(BookingDate))
             {
                 IsCancelled = true;
             }
+        }
+
+        public override string ToString()
+        {
+            DateTime dueDate = BookingDate.AddDays(10);
+
+            string bookingInfo = $"{Customer.Name} \t Rum: {Room.RoomName} \t " +
+                                 $"Betald: {(Invoice?.IsPaid == true ? "Ja" : "Nej")} \t " +
+                                 $"Bokningsdatum: {BookingDate:d} \t " +
+                                 $"Check-In: {CheckInDate:d} \t Check-Out: {CheckOutDate:d} \t Förfallodatum: {dueDate:d}";
+
+
+            if (Invoice?.IsPaid == false && BookingDate.AddDays(10) < DateTime.Now)
+            {
+                bookingInfo += " \t (Avbokad)";
+            }
+            return bookingInfo;
         }
     }
 }

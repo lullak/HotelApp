@@ -66,7 +66,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(45, 21);
+            label1.Location = new Point(12, 21);
             label1.Name = "label1";
             label1.Size = new Size(56, 20);
             label1.TabIndex = 4;
@@ -142,9 +142,9 @@
             // listBoxCustomers
             // 
             listBoxCustomers.FormattingEnabled = true;
-            listBoxCustomers.Location = new Point(45, 56);
+            listBoxCustomers.Location = new Point(12, 44);
             listBoxCustomers.Name = "listBoxCustomers";
-            listBoxCustomers.Size = new Size(612, 324);
+            listBoxCustomers.Size = new Size(686, 324);
             listBoxCustomers.TabIndex = 12;
             listBoxCustomers.SelectedIndexChanged += listBoxCustomers_SelectedIndexChanged;
             // 

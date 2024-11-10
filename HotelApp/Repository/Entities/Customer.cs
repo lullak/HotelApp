@@ -26,7 +26,7 @@ namespace HotelApp.Repository.Entities
 
         public override string ToString()
         {
-            return $"Namn: {Name}, Mejl: {Email}, Telefonnummer: {PhoneNumber}";
+            return $"{Name}\t{Email,-30}\t{PhoneNumber}";
         }
     }
 }

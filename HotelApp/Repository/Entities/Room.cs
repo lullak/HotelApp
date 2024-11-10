@@ -17,7 +17,7 @@ namespace HotelApp.Repository.Entities
 
         [Required]
         [StringLength(50)]
-        public string RoomType { get; set; } // Single or Double
+        public string RoomType { get; set; } 
 
         [Required]
         public bool HasExtraBed { get; set; }
@@ -27,21 +27,25 @@ namespace HotelApp.Repository.Entities
 
         [Required]
         [Range(1, 4, ErrorMessage = "Kapacitet måste vara mellan 1 and 4.")]
-        public int Capacity { get; set; }  // The number of people the room can accommodate
+        public int Capacity { get; set; }
 
-        // Navigation property - 0 to many relationship with Booking
         public ICollection<Booking> Bookings { get; set; }
 
         public void ValidateExtraBeds()
         {
             if (HasExtraBed && (ExtraBedCount == null || ExtraBedCount < 1 || ExtraBedCount > 2))
             {
-                throw new InvalidOperationException("ExtraBedCount must be 1 or 2 if HasExtraBeds is true.");
+                throw new InvalidOperationException("Extra sängar måste vara mellan 1 och 2 if HasExtraBeds is true.");
             }
             else if (!HasExtraBed && ExtraBedCount != null)
             {
-                throw new InvalidOperationException("ExtraBedCount must be null if HasExtraBeds is false.");
+                throw new InvalidOperationException("ExtraBedCount måste vara null om Has extra beds är false.");
             }
+        }
+
+        public override string ToString()
+        {
+            return $"{RoomName} - Kapacitet: {Capacity}, Max antal extra sängar: {ExtraBedCount}";
         }
     }
 }

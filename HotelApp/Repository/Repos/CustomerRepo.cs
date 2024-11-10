@@ -23,20 +23,17 @@ namespace HotelApp.Repository.Repos
             return bookings.Any();
         }
 
-        // Get all customers
         public List<Customer> GetAllCustomers()
         {
             return _context.Customers.ToList();
         }
 
-        // Add customer
         public void AddCustomer(Customer customer)
         {
             _context.Customers.Add(customer);
             _context.SaveChanges();
         }
 
-        // Update customer
         public void UpdateCustomer(Customer updatedCustomer)
         {
             var originalCustomer = _context.Customers.SingleOrDefault(c => c.CustomerId == updatedCustomer.CustomerId);
@@ -47,7 +44,7 @@ namespace HotelApp.Repository.Repos
             }
         }
 
-        // Delete customer (if no bookings exist)
+
         public bool DeleteCustomer(int customerId)
         {
             var customer = _context.Customers.Include(c => c.Bookings).SingleOrDefault(c => c.CustomerId == customerId);
@@ -57,7 +54,7 @@ namespace HotelApp.Repository.Repos
                 _context.SaveChanges();
                 return true;
             }
-            return false; // Cannot delete customer with bookings
+            return false;
         }
     }
 }
