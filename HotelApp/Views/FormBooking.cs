@@ -86,6 +86,12 @@ namespace HotelApp.Views
                 return;
             }
 
+            if (checkInDate <= DateTime.Today) {
+
+                MessageBox.Show("Datum kan ej vara tidigare än dagens datum.");
+                return;
+            }
+
             var isRoomAvailable = _roomRepo.IsRoomAvailable(selectedRoom.RoomId, checkInDate, checkOutDate);
             if (!isRoomAvailable)
             {
