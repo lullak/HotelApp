@@ -13,7 +13,7 @@ namespace HotelApp.Repository
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connString = ConfigurationManager.ConnectionStrings["HotelLaptopDB"].ConnectionString;
+            var connString = ConfigurationManager.ConnectionStrings["HotelDekstopDB"].ConnectionString;
             //HotelDekstopDB och för laptopen HotelLaptopDB
 
             optionsBuilder.UseSqlServer(connString);

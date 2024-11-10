@@ -22,7 +22,7 @@ namespace HotelApp.Views
         {
             DateTime checkInDate = dateTimePickerCheckIn.Value;
             DateTime checkOutDate = dateTimePickerCheckOut.Value;
-            int capacity = (int)comboBoxCapacity.SelectedItem;
+            int capacity = comboBoxCapacity.SelectedItem != null ? (int)comboBoxCapacity.SelectedItem : 0;
 
             var availableRooms = _roomRepo.GetAvailableRooms(checkInDate, checkOutDate, capacity);
 

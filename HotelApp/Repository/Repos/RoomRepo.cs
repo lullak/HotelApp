@@ -38,5 +38,11 @@ namespace HotelApp.Repository.Repos
         {
             return _context.Rooms.ToList();
         }
+
+        public void UpdateRoom(Room room)
+        {
+            _context.Rooms.Update(room);
+            _context.SaveChanges();
+        }
     }
 }

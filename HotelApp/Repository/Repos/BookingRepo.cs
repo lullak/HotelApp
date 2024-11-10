@@ -54,17 +54,11 @@ namespace HotelApp.Repository.Repos
                 IsCancelled = false
             };
 
-            var newInvoice = new Invoice
-            {
-                Amount = amount,
-                DateIssued = DateTime.Now,
-                IsPaid = false
-            };
-
+            InvoiceRepo _invoiceRepo = new InvoiceRepo(_context);
+            var newInvoice = _invoiceRepo.CreateInvoice(amount);
             newBooking.Invoice = newInvoice;
 
             _context.Bookings.Add(newBooking);
-            _context.Invoices.Add(newInvoice);
             _context.SaveChanges();
 
             return newBooking;

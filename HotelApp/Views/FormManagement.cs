@@ -163,7 +163,7 @@ namespace HotelApp.Views
                     _bookingRepo.UpdateBooking(bookingId, newCustomerId, newRoomId, checkInDate, checkOutDate, amount, isPaid);
 
                     MessageBox.Show("Bokningen har uppdaterats.");
-                    LoadBookings(); 
+                    LoadBookings();
                 }
             }
             else
@@ -195,6 +195,44 @@ namespace HotelApp.Views
                     MessageBox.Show("Välj en bokning att radera.");
                 }
             }
+        }
+
+        private void buttonEditRoom_Click(object sender, EventArgs e)
+        {
+            var selectedRoom = comboBoxRoom.SelectedItem as Room;
+
+            if (selectedRoom == null)
+            {
+                MessageBox.Show("Välj ett rum att redigera.");
+                return;
+            }
+
+            if (!int.TryParse(textBoxExtraBeds.Text, out int extraBedCount))
+            {
+                MessageBox.Show("Ange antalet extrasängar.");
+                return;
+            }
+
+            if (selectedRoom.RoomType == "Single" && extraBedCount > 0)
+            {
+                MessageBox.Show("Singelrum kan inte ha extrasängar");
+                return;
+            }
+            else if (selectedRoom.RoomType == "Double" && (extraBedCount < 0 || extraBedCount > 2))
+            {
+                MessageBox.Show("Dubbelrum kan endast ha 1 eller 2 extra sängar.");
+                return;
+            }
+
+            int newCapacity = selectedRoom.Capacity + extraBedCount; 
+
+            selectedRoom.ExtraBedCount = extraBedCount;
+            selectedRoom.Capacity = selectedRoom.RoomType == "Double" ? 2 + extraBedCount : 1;
+
+            _roomRepo.UpdateRoom(selectedRoom);
+
+            MessageBox.Show("Kapacitet och antal extrasängar har uppdaterats.");
+            ClearAll();
         }
     }
 }

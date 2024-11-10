@@ -64,6 +64,7 @@
             label14 = new Label();
             buttonEdit = new Button();
             buttonDelete = new Button();
+            buttonEditRoom = new Button();
             ((System.ComponentModel.ISupportInitialize)bookingBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)hotelAppDbContextBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)hotelAppDbContextBindingSource1).BeginInit();
@@ -147,7 +148,7 @@
             button1.Name = "button1";
             button1.Size = new Size(94, 29);
             button1.TabIndex = 60;
-            button1.Text = "Rensa";
+            button1.Text = "Uppdatera";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
@@ -272,7 +273,6 @@
             // 
             textBoxExtraBeds.Location = new Point(565, 472);
             textBoxExtraBeds.Name = "textBoxExtraBeds";
-            textBoxExtraBeds.ReadOnly = true;
             textBoxExtraBeds.Size = new Size(125, 27);
             textBoxExtraBeds.TabIndex = 76;
             // 
@@ -360,11 +360,22 @@
             buttonDelete.UseVisualStyleBackColor = true;
             buttonDelete.Click += buttonDelete_Click;
             // 
+            // buttonEditRoom
+            // 
+            buttonEditRoom.Location = new Point(882, 470);
+            buttonEditRoom.Name = "buttonEditRoom";
+            buttonEditRoom.Size = new Size(159, 29);
+            buttonEditRoom.TabIndex = 86;
+            buttonEditRoom.Text = "Redigera rum";
+            buttonEditRoom.UseVisualStyleBackColor = true;
+            buttonEditRoom.Click += buttonEditRoom_Click;
+            // 
             // FormManagement
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1537, 684);
+            Controls.Add(buttonEditRoom);
             Controls.Add(buttonDelete);
             Controls.Add(buttonEdit);
             Controls.Add(label14);
@@ -444,5 +455,6 @@
         private Label label14;
         private Button buttonEdit;
         private Button buttonDelete;
+        private Button buttonEditRoom;
     }
 }
