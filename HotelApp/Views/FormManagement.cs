@@ -184,10 +184,8 @@ namespace HotelApp.Views
                                                         "Bekräfta", MessageBoxButtons.YesNo);
                     if (confirmResult == DialogResult.Yes)
                     {
-                        // Delete the booking using BookingRepo
                         _bookingRepo.DeleteBooking(bookingToDelete.BookingId);
 
-                        // Reload the bookings list to reflect deletion
                         LoadBookings();
                         MessageBox.Show("Bokningen har raderats.");
                     }

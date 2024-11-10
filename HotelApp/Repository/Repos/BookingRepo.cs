@@ -1,6 +1,5 @@
 ﻿using HotelApp.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace HotelApp.Repository.Repos
 {
