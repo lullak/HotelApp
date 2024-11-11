@@ -19,6 +19,7 @@ namespace HotelApp.Repository.Repos
                 .Include(b => b.Room)
                 .Include(b => b.Invoice)
                 .OrderByDescending(b => b.BookingDate)
+                .AsNoTracking()
                 .ToList();
         }
 

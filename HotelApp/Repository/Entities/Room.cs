@@ -26,17 +26,6 @@ namespace HotelApp.Repository.Entities
 
         public ICollection<Booking> Bookings { get; set; }
 
-        public void ValidateExtraBeds()
-        {
-            if (HasExtraBed && (ExtraBedCount == null || ExtraBedCount < 1 || ExtraBedCount > 2))
-            {
-                throw new InvalidOperationException("Extra sängar måste vara mellan 1 och 2 if HasExtraBeds is true.");
-            }
-            else if (!HasExtraBed && ExtraBedCount != null)
-            {
-                throw new InvalidOperationException("ExtraBedCount måste vara null om Has extra beds är false.");
-            }
-        }
 
         public override string ToString()
         {

@@ -20,7 +20,9 @@ namespace HotelApp.Repository.Repos
 
         public List<Customer> GetAllCustomers()
         {
-            return _context.Customers.ToList();
+            return _context.Customers
+                .AsNoTracking()
+                .ToList();
         }
 
         public void AddCustomer(Customer customer)

@@ -19,8 +19,9 @@ namespace HotelApp.Repository.Repos
                 .Where(room =>
                     room.Capacity >= capacity &&
                     room.Bookings.All(b => b.IsCancelled ||
-                                          b.CheckOutDate <= checkInDate ||
-                                          b.CheckInDate >= checkOutDate))
+                                           b.CheckOutDate <= checkInDate ||
+                                           b.CheckInDate >= checkOutDate))
+                .AsNoTracking()
                 .ToList();
         }
 
@@ -30,19 +31,27 @@ namespace HotelApp.Repository.Repos
                 .Where(b => b.RoomId == roomId &&
                             ((b.CheckInDate >= checkInDate && b.CheckInDate < checkOutDate) ||
                              (b.CheckOutDate > checkInDate && b.CheckOutDate <= checkOutDate)))
+                .AsNoTracking()
                 .Any();
 
             return !isRoomBooked;
         }
         public List<Room> GetAllRooms()
         {
-            return _context.Rooms.ToList();
+            return _context.Rooms
+                .AsNoTracking()
+                .ToList();
         }
 
         public void UpdateRoom(Room room)
         {
             _context.Rooms.Update(room);
             _context.SaveChanges();
+        }
+
+        public void DetachRoom(Room room)
+        {
+            _context.Entry(room).State = EntityState.Detached;
         }
     }
 }

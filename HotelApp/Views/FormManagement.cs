@@ -199,6 +199,7 @@ namespace HotelApp.Views
 
         private void buttonEditRoom_Click(object sender, EventArgs e)
         {
+
             var selectedRoom = comboBoxRoom.SelectedItem as Room;
 
             if (selectedRoom == null)
@@ -233,6 +234,7 @@ namespace HotelApp.Views
 
             MessageBox.Show("Kapacitet och antal extrasängar har uppdaterats.");
             ClearAll();
+            _roomRepo.DetachRoom(selectedRoom);
         }
     }
 }

@@ -39,7 +39,7 @@
             comboBoxRoom = new ComboBox();
             label1 = new Label();
             label2 = new Label();
-            button1 = new Button();
+            buttonUpdate = new Button();
             label3 = new Label();
             label4 = new Label();
             checkBoxPayment = new CheckBox();
@@ -60,7 +60,7 @@
             label11 = new Label();
             label12 = new Label();
             label13 = new Label();
-            button2 = new Button();
+            buttonBookRoom = new Button();
             label14 = new Label();
             buttonEdit = new Button();
             buttonDelete = new Button();
@@ -142,15 +142,15 @@
             label2.TabIndex = 59;
             label2.Text = "Rum";
             // 
-            // button1
+            // buttonUpdate
             // 
-            button1.Location = new Point(1418, 446);
-            button1.Name = "button1";
-            button1.Size = new Size(94, 29);
-            button1.TabIndex = 60;
-            button1.Text = "Uppdatera";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            buttonUpdate.Location = new Point(1418, 446);
+            buttonUpdate.Name = "buttonUpdate";
+            buttonUpdate.Size = new Size(94, 29);
+            buttonUpdate.TabIndex = 60;
+            buttonUpdate.Text = "Uppdatera";
+            buttonUpdate.UseVisualStyleBackColor = true;
+            buttonUpdate.Click += button1_Click;
             // 
             // label3
             // 
@@ -320,15 +320,15 @@
             label13.TabIndex = 81;
             label13.Text = "Rumtyp";
             // 
-            // button2
+            // buttonBookRoom
             // 
-            button2.Location = new Point(1292, 649);
-            button2.Name = "button2";
-            button2.Size = new Size(94, 29);
-            button2.TabIndex = 82;
-            button2.Text = "Boka rum";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            buttonBookRoom.Location = new Point(1292, 649);
+            buttonBookRoom.Name = "buttonBookRoom";
+            buttonBookRoom.Size = new Size(94, 29);
+            buttonBookRoom.TabIndex = 82;
+            buttonBookRoom.Text = "Boka rum";
+            buttonBookRoom.UseVisualStyleBackColor = true;
+            buttonBookRoom.Click += button2_Click;
             // 
             // label14
             // 
@@ -379,7 +379,7 @@
             Controls.Add(buttonDelete);
             Controls.Add(buttonEdit);
             Controls.Add(label14);
-            Controls.Add(button2);
+            Controls.Add(buttonBookRoom);
             Controls.Add(label13);
             Controls.Add(label12);
             Controls.Add(label11);
@@ -400,7 +400,7 @@
             Controls.Add(checkBoxPayment);
             Controls.Add(label4);
             Controls.Add(label3);
-            Controls.Add(button1);
+            Controls.Add(buttonUpdate);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(comboBoxRoom);
@@ -430,7 +430,7 @@
         private ComboBox comboBoxRoom;
         private Label label1;
         private Label label2;
-        private Button button1;
+        private Button buttonUpdate;
         private Label label3;
         private Label label4;
         private CheckBox checkBoxPayment;
@@ -451,7 +451,7 @@
         private Label label11;
         private Label label12;
         private Label label13;
-        private Button button2;
+        private Button buttonBookRoom;
         private Label label14;
         private Button buttonEdit;
         private Button buttonDelete;
